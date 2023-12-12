@@ -4,7 +4,7 @@
   "description": "Tip Driver web and app api",
   "main": "server.ts",
   "scripts": {
-    "build": "npm install && tsc",
+    "build": "npm install && tsc --build",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node-esm dist/server.ts",
     "dev": "nodemon --exec ts-node-dev server.ts"
