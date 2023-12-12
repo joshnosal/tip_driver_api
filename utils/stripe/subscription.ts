@@ -23,6 +23,7 @@ const start = async (customerId: string, priceId: string) => {
   // Set new trial period
   let trial_period_days = Number(process.env.TRIAL_PERIOD_DAYS || 0)
   let now = new Date()
+  let trialExpires = new Date(now.getFullYear(), now.getMonth(), now.getDate() + trial_period_days)
   
   subs = await stripeSDK.subscriptions.list({ customer: customerId })
   let sub: Stripe.Subscription
@@ -45,7 +46,7 @@ const start = async (customerId: string, priceId: string) => {
           }
         }
       }),
-      billing_cycle_anchor: new Date(now.getFullYear(), now.getMonth() + 1, 1).getTime() / 1000
+      billing_cycle_anchor: new Date(trialExpires.getFullYear(), trialExpires.getMonth() + 1, 1).getTime() / 1000
     })
   }
 }
