@@ -37,6 +37,15 @@ companyRouter.post('/new', async (req, res, next) => {
     company.stripe_customer_id = customer.id
     await company.save()
 
+    let account = await stripe.account.create({
+      name: company.name,
+      email: await clerk.getPrimaryEmail(req.auth.userId),
+      companyId: company._id.toString(),
+      returnUrl: process.env.WEB_URL + '/dash/redirects/stripe'
+    })
+    company.stripe_id = account.account.id
+    await company.save()
+
     const addUserToCompany = async (userId: string, type: 'admin'|'basic_user') => {
       if(userId === req.auth.userId) return //Skip adding current user
       if(type === 'admin') {
